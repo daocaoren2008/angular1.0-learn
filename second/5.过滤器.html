@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" ng-app>
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训http://www.zhufengpeixun.cn</title>
+</head>
+<body>
+<!--内置过滤器 九个-->
+
+<!--数字过滤器number,后面的参数1表示保留的小数位-->
+{{1000000000.128312381 | number:1}} <br>
+<!--货币过滤器√-->
+{{100 | currency:'￥'}} <br>
+<!--日期过滤器√-->
+{{1487750944195 | date:'MM月dd日 hh:mm:ss'}} <br>
+<!--大小写过滤器-->
+{{'aaaa' | uppercase}}
+{{'AAAA' | lowercase}} <br>
+<!--限制位数，参数表示字符截取的长度√-->
+{{'你好么哈哈我很好 谢谢！' | limitTo:4}}
+<!--json过滤器，把数据按照json格式展现，参数表示格式化后的空格数。-->
+<pre>{{ {name:1,age:8,address:'hello'} | json:4 }}</pre>
+<!--多次使用过滤器-->
+{{"100000000" | limitTo:3 | currency:'$'}}
+<!--过滤器的使用 多个过滤器用|隔开 传递参数用: -->
+<!--排序 过滤器-->
+<script src="../node_modules/angular/angular.js"></script>
+<script>
+    //过滤器 分为两大类 自定义过滤器 内置过滤器
+</script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训http://www.zhufengpeixun.cn</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <input type="text" ng-model="title">
+            <panel tit="{{title}}">这是内容1</panel>
+            <panel tit="{{title}}">这是内容2</panel>
+            <panel tit="{{title}}">这是内容3</panel>
+        </div>
+    </div>
+</div>
+<script src="../node_modules/angular/angular.js"></script>
+<script>
+    var app = angular.module('appModule',[]);
+    app.run(['$rootScope',function ($rootScope) {
+        $rootScope.title = 'zfpx'
+    }]);
+    app.directive('panel',function () {
+        return {
+            restrict:'E',
+            templateUrl:'tmpl/panel.html',//通过路径 引用html
+            transclude:true,//保留内容，嵌入到panel中
+            scope:{  //scope.title = 'zfpx1';//声明的是一个字符串 和外面作用域上的值没关系
+                title:'@tit' //@符号取得是 title对应的字符串 ,前后名字相同可以去掉
+            }
+            //默认不产生作用域 而且拥有父子关系
+            //true不断绝父子关系，仍然可以向上查找
+            //{} 断绝父子关系，就是和$rootScope平级
+        }
+    })
+</script>
+</body>
+</html>

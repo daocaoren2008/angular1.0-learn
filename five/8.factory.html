@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>服务（核心内容）</title>
+</head>
+<body>
+<div ng-controller="oneCtrl"></div>
+<div ng-controller="twoCtrl"></div>
+<!--
+1.angular中提供了五种服务 用的时候 我一般采用factory
+provider,"factory",service,constant,value
+-->
+<script src="../node_modules/angular/angular.js"></script>
+<script>
+    var app = angular.module('appModule',[]);
+    //factory不支持配置 ，因为配置是在factory之前执行完成的,factory是基于provider的
+    app.factory('Calc', function () { //会先new provider
+        this.currency = '$';
+        return {
+            "+": (a,b)=>this.currency+(a+b)
+        }
+    }); //后面的函数就是$get函数
+    app.controller('oneCtrl',function ($scope,Calc) {
+        console.log(Calc["+"](1,2));
+    });
+    app.controller('twoCtrl',function ($scope,Calc) {
+        console.log(Calc["+"](4,6));
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训http://www.zhufengpeixun.cn</title>
+</head>
+<body>
+<girl cry eat>XXXX</girl>
+<script src="../node_modules/angular/angular.js"></script>
+<script>
+    var app = angular.module('appModule',[]);
+    app.directive('girl',function () {
+        return {
+            //这个控制器 代表的就是指令的控制器
+            controller:function ($scope) {
+                $scope.arr = []; //存放数据
+                this.say = function (kinds) { //点击xxxx弹出eat和cry
+                    $scope.arr.push(kinds);
+                }
+            },
+            link:function (scope,element,attrs) {
+//                link函数应来操作dom,一些跟数据无关的操作
+                element.on('click',function () {
+                    alert(scope.arr);
+                });
+            },
+//            scope:{}//为什么要？创建一个独立作用域，否则控制器使用的是跟作用域
+        }
+    });
+    app.directive('eat',function () {
+        return {
+            require:'^girl',// ^ 找不到则向上找，如果找不到不想报错^?
+            link:function (scope,element,attrs,gCtrl) {//会将girl的controller进行实例化，并且放在第四个参数上
+                //默认指令的作用域会向上查找，跳过包含他的指令
+                gCtrl.say('eat');
+            },
+        }
+    });
+    app.directive('cry',function () {
+        return {
+            require:'girl',
+            link:function (scope,element,attrs,gCtrl) {
+                gCtrl.say('cry');
+            },
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训http://www.zhufengpeixun.cn</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+    <style>
+        .yellow{background:yellow}
+        .green{background:green;}
+    </style>
+</head>
+<body>
+
+<div ng-controller="orderCtrl">
+    <table class="table table-bordered">
+        <tr>
+            <td>序号</td>
+            <th>姓名</th>
+            <th>数学</th>
+            <th>语文</th>
+            <th>英语</th>
+        </tr>
+        <!--<tr ng-repeat="score in scores track by $index" ng-class="{true:'yellow',false:'green'}[flag]">-->
+        <tr ng-repeat="score in scores track by $index" ng-class="{yellow:$even,green:$odd}">
+            <td>{{$index+1}}</td>
+            <td>{{score.name}}</td>
+            <td>{{score.math}}</td>
+            <td>{{score.chinese}}</td>
+            <td>{{score.english}}</td>
+        </tr>
+    </table>
+</div>
+<script src="../node_modules/angular/angular.js"></script>
+<script>
+    var app = angular.module('appModule', []);
+
+    app.controller('orderCtrl', ['$scope', function ($scope) {
+        $scope.flag = $scope.$index%2==true;
+        $scope.scores = [
+            {name: '张三', math: 118, english: 30, chinese: 40},
+            {name: '李四', math: 62, english: 67, chinese: 66},
+            {name: '王五', math: 78, english: 89, chinese: 66},
+            {name: '赵六', math: 120, english: 77, chinese: 88},
+        ];
+    }])
+</script>
+</body>
+</html>

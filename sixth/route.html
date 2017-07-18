@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>路由</title>
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css">
+</head>
+<body>
+<!--angular-route 不是 angular-router-->
+<!--angular-route angular-ui-router可以实现多层嵌套-->
+<div class="container h3">
+    <a href="#!/list" class="col-lg-2 col-md-2col-sm-2  col-xs-2">列表页</a><a href="#!/add" class="col-lg-2 col-md-2  col-sm-2 col-xs-2">添加
+</a>
+</div>
+<div ng-view="" class="container"></div>
+<script src="node_modules/jquery/dist/jquery.js"></script>
+<script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+<script src="node_modules/angular/angular.js"></script>
+<script src="node_modules/angular-route/angular-route.js"></script>
+<script src="node_modules/angular-resource/angular-resource.js"></script>
+<script>
+    var app = angular.module('appModule', ['ngRoute', 'ngResource']);
+    //    提供了一个服务 $route 配置$route服务
+
+    //    http://localhost:63341/angular/sixth/route.html?_ijt=udet3qu8kiv8otkoccn9htcjcj#!/list
+    //    url中的# 哈希  页面不刷新，路径变化，可以发起ajax请求
+    //    #！，搜索引擎会抓取页面内容，没有！会认为是一个页面不会重新抓取。
+
+    app.config(function ($routeProvider) {
+//        $routeProvider 是服务中的this
+        //根据不同的路径返回不同的内容
+        $routeProvider.when('/list', {//这里是#!后面的路径不能加点！！！！！！
+            templateUrl: 'tmpl/list.html',//模板内容会当道ng-view中
+            controller: 'listCtrl'
+        }).when('/add', {
+            templateUrl: 'tmpl/add.html',
+            controller: 'addCtrl'
+        }).otherwise('/list');//当访问其他路径时，返回list页面
+    });
+
+    app.factory('Books', function ($resource) {
+        return $resource('/book/:id', null, {//'/book/:id',请求的路径
+            update: {method: 'PUT'}//增加一个方法
+        })
+    });
+
+    app.controller('listCtrl', function ($scope, $rootScope, Books) {
+        $scope.update = function () {
+//            第一个参数是修改的Id，第二个是修改成什么
+            Books.update({id: $scope.temp.id}, $scope.temp).$promise.then(function (data) {
+//                map 映射 映射成我们想要的内容
+                $scope.books = $scope.books.map(function (item) {
+                    if (item.id == $scope.temp.id) {
+                        return $scope.temp;
+                    } else {
+                        return item;
+                    }
+                });
+                $('#myModal').modal('hide')
+            });
+        };
+        $scope.triggerUpdate = function (b) {
+//            克隆对象
+            $scope.temp = JSON.parse(JSON.stringify(b));
+        };
+
+        $scope.remove = function (book) {
+            //通知后台删除数据，当后台数据删除以后，需要通知前台
+            Books.delete({id: book.id}).$promise.then(function () {//$promise
+//              当服务端返回空对象后会调用的当前方法
+                $scope.books = $scope.books.filter(function (item) {
+                    return item.id != book.id;//
+                })
+            });
+//
+        };
+//        获取所有
+        $scope.books = Books.query();//服务器返回数组 //GET /book/
+        if ($rootScope.book) {
+            $scope.books.push($rootScope.book)
+        }
+    });
+    app.controller('addCtrl', function ($scope, $rootScope, Books) {
+        $scope.name = 'add';
+        $scope.add = function () {
+            $scope.pro.count = 1;//在需要增加的对象上 添加数量
+            Books.save($scope.pro).$promise.then(function (data) {//res是后台返回添加成功的那一项。
+                console.log(data);
+                $rootScope.book = data;
+//                $scope.books.push(data);
+                location.hash = '#/list';
+            });
+        };
+    })
+    /*****************************************************************/
+
+</script>
+</body>
+</html>

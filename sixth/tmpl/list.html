@@ -1,0 +1,47 @@
+<table class="table table-bordered text-center">
+    <tr>
+        <th class="text-center">序号</th>
+        <th class="text-center">书名</th>
+        <th class="text-center">价格</th>
+        <th class="text-center">数量</th>
+        <th class="text-center">小计</th>
+        <th class="text-center">操作</th>
+    </tr>
+    <tr ng-repeat="book in books track by $index">
+        <td>{{book.id}}</td>
+        <td>{{book.bookName}}</td>
+        <td>{{book.price | currency:'¥'}}</td>
+        <td>
+            <button ng-click="book.count=book.count-1">-</button>
+            <input type="text" ng-model="book.count">
+            <button ng-click="book.count=book.count+1">+</button>
+        </td>
+        <td>{{book.price*book.count}}</td>
+        <td>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"
+                    ng-click="triggerUpdate(book)">
+                修改
+            </button>
+            <button class="btn btn-danger" ng-click="remove(book)">删除</button>
+        </td>
+    </tr>
+</table>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">修改内容</h4>
+            </div>
+            <div class="modal-body">
+                名称：<input type="text" ng-model="temp.bookName">
+                价格：<input type="text" ng-model="temp.price">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" ng-click="update(temp)">确认修改</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<select name="" id="selecter">
+    <option value="0">上海</option>
+    <option value="1">北京</option>
+</select>
+<script>
+    var oSelect=document.getElementById('selecter');
+    oSelect.onchange=function () {
+        alert(this.value);//获取下拉菜单的值，就是获取select的值。
+    }
+</script>
+</body>
+</html>

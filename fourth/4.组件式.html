@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训http://www.zhufengpeixun.cn</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <!--attr props 想传递一些数据可以通过属性传递-->
+            <panel title="这是标题1">这是内容1</panel>
+            <panel title="这是标题2">这是内容2</panel>
+            <panel title="这是标题3">这是内容3</panel>
+        </div>
+    </div>
+</div>
+<!--1.先要保留指令之间的夹着的内容，指定放在哪个位置-->
+<script src="../node_modules/angular/angular.js"></script>
+<script>
+    var app = angular.module('appModule',[]);
+    app.directive('panel',function () {
+        return {
+            restrict:'E',
+            //封装好了一个组件 可以多次调用
+            templateUrl:'tmpl/panel.html',//通过路径 引用html
+            transclude:true,//保留内容，嵌入到panel中
+/*            link:function (scope,element,attr) {
+                //想拿到attr中的属性放到heading中
+                scope.title = attr.title; //将数据挂在作用域上 视图可以通过{{}}来获取值
+            },*/
+            scope:{
+//                title:'@title' //scope.title = attr.title;
+            }  // {} 通过true {} 创建一个独立作用域
+//            scope:true
+        }
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>$apply</title>
+</head>
+<body ng-controller="myCtrl">
+<p>//angular提供的服务 都可以自动调用$apply,不需要手动调用 watch+apply就实现了 双向数据绑定</p>
+{{date | date:'hh:mm:ss'}},n={{n}}
+<script src="../node_modules/angular/angular.js"></script>
+<script>
+    var app = angular.module('appModule', []);
+    /*
+     app.controller('myCtrl',function ($scope) {
+     setInterval(function () {
+     $scope.date=Date.now();
+     //不是angular中的方法，改变数据不会刷新视图
+     $scope.$apply()//告诉angular数据有变化，刷新视图
+     },1000)
+     });
+     */
+    //angular提供的服务 都可以自动调用$apply,不需要手动调用   watch+apply就实现了 双向数据绑定
+    app.controller('myCtrl', function ($scope, $interval) {
+        $scope.n = 0;
+        var timer = $interval(function () {
+            $scope.date = Date.now();
+            $scope.n++;
+            if ($scope.n >= 10) {
+                $interval.cancel(timer);//取消定时器
+            }
+        }, 1000)
+    })
+</script>
+</body>
+</html>

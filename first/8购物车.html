@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>购物车</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+</head>
+<body ng-controller="myCtrl">
+<div class="container">
+    <table class="table table-bordered text-center table-hover">
+        <caption class="h2">购物车</caption>
+        <tr>
+            <th class="text-center">全选 <input type="checkbox" ng-model="selectAll" ng-click="all()"></th>
+            <th class="text-center">商品名称</th>
+            <th class="text-center">商品价格</th>
+            <th class="text-center">商品数量</th>
+            <th class="text-center">小计</th>
+            <th class="text-center">操作</th>
+        </tr>
+        <tr ng-repeat="product in products track by $index">
+            <td><input type="checkbox" ng-model="product.isSelected" ng-click="one()"></td>
+            <td>{{product.productName}}</td>
+            <td>{{product.price}}</td>
+            <td>
+                <button ng-click="product.count=product.count-1" ng-disabled="product.count==1">-</button>
+                <input type="text" ng-model="product.count" class="text-center">
+                <button ng-click="product.count=product.count-0+1">+</button>
+            </td>
+            <td>{{product.price * product.count}}</td>
+            <td>
+                <button class="btn btn-danger" ng-click="remove(product)">删除</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6" class="text-left">
+                总计：{{sum()}},
+                折扣: <select ng-model="sale"><option value="{{dis.val}}" ng-repeat="dis in discounts">{{dis.content}}</option></select>
+                打折后:{{sum()*sale | currency:'¥'}}
+            </td>
+        </tr>
+    </table>
+    <form>
+        <div class="form-group">
+            <label for="productName" class="control-label">商品名称</label>
+            <input type="text" id="productName" class="form-control" placeholder="请输入商品名称" ng-model="product.productName">
+        </div>
+        <div class="form-group">
+            <label for="productName" class="control-label">商品价格</label>
+            <input type="text" id="price" class="form-control" placeholder="请输入商品价格" ng-model="product.price">
+        </div>
+        <div class="form-group text-right">
+            <button class="btn btn-success"  ng-click="add()">添加</button>
+            <button type="reset" class="btn btn-danger" ng-click="reset()">重置</button>
+        </div>
+    </form>
+</div>
+<script src="../node_modules/angular/angular.js"></script>
+<script src="8.car.js"></script>
+</body>
+</html>

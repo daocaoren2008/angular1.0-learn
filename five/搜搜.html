@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>百度搜素框</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css"/>
+</head>
+<body ng-controller="searchCtrl">
+<div class="container">
+    <h2 class="text-danger text-center">搜索框</h2>
+    <input type="text" ng-model="query" ng-keyup="search($event)" class="form-control">
+    <ul class="list-group">
+        <li class="list-group-item" ng-repeat="item in list track by $index" ng-class="{active:index==$index}">
+            {{item}}
+        </li>
+    </ul>
+</div>
+<script src="../node_modules/angular/angular.js"></script>
+<script>
+    var app = angular.module('appModule', []);
+    app.controller('searchCtrl', function ($scope, $http, $sce) {
+        $scope.query = '';
+        $scope.index = -1;
+        $scope.list = [];
+        $scope.stop = function (e) {
+            var code = e.keyCode;
+            if(code==38){
+                e.preventDefault();//阻止按下down键后的默认行为。
+            }
+        };
+        $scope.search = function (e) {
+            var code = e.keyCode;
+            if (code == 13) {//按回车键
+                return window.open('https://www.baidu.com/s?wd=' + $scope.query);
+            }
+            if (code == 38) {//按up键
+                $scope.index--;
+                if ($scope.index < -1) {
+                    $scope.index = $scope.list.length - 1;
+                }
+                console.log($scope.index);
+                if ($scope.index == -1) {
+                    $scope.query = $scope.temp;
+                } else {
+                    $scope.query = $scope.list[$scope.index];
+                }
+                return;//不执行jsonp
+            }
+            if (code == 40) {//按down键
+                $scope.index++;
+                if ($scope.index > $scope.list.length - 1) {
+                    $scope.index = -1;
+                }
+                if ($scope.index == -1) {
+                    $scope.query = $scope.temp;
+                } else {
+                    $scope.query = $scope.list[$scope.index];
+                }
+                console.log($scope.index);
+                return;//不执行jsonp
+            }
+            $http.jsonp(
+                $sce.trustAsResourceUrl('https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=' + $scope.query),
+                {jsonpCallbackParam: 'cb'})
+                .then(function (res) {
+                    console.log(res.data.s);
+                    $scope.list = res.data.s;
+                    $scope.temp = $scope.query;//存储最初的搜索值
+
+                }, function (err) {
+                    console.log(err)
+                })
+        }
+
+    });
+
+</script>
+</body>
+</html>

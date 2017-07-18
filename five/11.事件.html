@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训http://www.zhufengpeixun.cn</title>
+</head>
+<body>
+<div ng-controller="parent">
+    货款：<input type="text" ng-model="total">
+    <div ng-controller="child">
+        货品：{{name}} <br>
+        单价：{{price}} <br>
+        数量：<input type="text" ng-model="count">
+    </div>
+</div>
+<!--通过总价算数量，通过数量还能算总价-->
+<!--控制器 可以进行交互 $rootScope,服务,通过事件-->
+<script src="../node_modules/angular/angular.js"></script>
+<script>
+    //交互方式 $on 监听 $emit 向上发射并且包括自己  $broadcast 向下发射并且包括自己
+    var app = angular.module('appModule', []);
+    app.controller('parent', function ($scope) {
+        $scope.total = 10;
+        $scope.$on('爸爸我买了雪碧', function (e, data) {
+            $scope.total = data
+        });
+        $scope.$watch('total', function () {
+            console.log($scope.total)
+            $scope.$broadcast('拿钱去买', $scope.total)//向下传
+        })
+    });
+    app.controller('child', function ($scope) {
+        $scope.name = '雪碧';
+        $scope.price = 2.5;
+        $scope.count = 4;
+        $scope.$watch('count', function () {
+            //当数量变化的时候 向上发射
+            $scope.$emit('爸爸我买了雪碧', $scope.count * $scope.price);
+        });
+        $scope.$on('拿钱去买', function (e, data) {
+            console.log(data);
+            $scope.count = data / $scope.price;
+        })
+    });
+</script>
+</body>
+</html>

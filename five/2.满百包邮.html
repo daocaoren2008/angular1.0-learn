@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>满百包邮,$watch</title>
+</head>
+<body ng-controller="myCtrl">
+商品名称{{product.name}}
+商品价格{{product.name}}
+商品数量{{product.name}}
+邮费{{product.name}}
+总价{{sum()+product.free}}
+<script src="../node_modules/angular/angular.js"></script>
+<script>
+    var app = angular.module('appModule', []);
+    app.controller('myCtrl', function ($scope) {
+        $scope.product = {
+            name: '可乐',
+            price: 2.5,
+            count: '1',
+            free: 10
+        };
+        $scope.sum = function () {
+            return $scope.product.price * $scope.product.count;
+        };
+//      angular 脏值检查，效率低。 vue 是用的是数据劫持+观察者模式 Object.defineProperty
+        $scope.$watch($scope.sum, function (newVal) {
+            $scope.product.free = newVal >= 100 ? 0 : 10;
+        });
+
+        /*    $scope.age = 1;
+         //监控的第一个参数可以为作用域上属性名，还可以是函数
+         //$scope.$watch('age');
+         $scope.$watch(function () {
+         console.log(1);
+         //只要页面有任何一个值变化就会执行此函数,并且将函数的返回结果传入到另一个函数中
+         return $scope.age;
+         },function (newVal,oldVal) {
+         //age发生变化就会执行
+         if(newVal>4){
+         alert('age大于4了')
+         }
+         });
+         $scope.change = function () {
+         if($scope.name%2==0){
+         $scope.age++;
+         }
+         };*/
+    })
+</script>
+</body>
+</html>

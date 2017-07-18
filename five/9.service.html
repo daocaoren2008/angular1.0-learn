@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训http://www.zhufengpeixun.cn</title>
+</head>
+<body>
+<div ng-controller="oneCtrl"></div>
+<div ng-controller="twoCtrl"></div>
+<script src="../node_modules/angular/angular.js"></script>
+<script>
+    var app = angular.module('appModule',[]);
+    app.service('Calc', function () {
+        this['+']=(a,b)=>a+b;
+        this["-"] = (a,b)=>a+b;
+    });
+    //factory返回的对象 是service函数实例化后的结果
+    /*return {
+     "+": (a,b)=>a+b,
+     "-":(a,b)=>a-b
+     }*/
+    app.controller('oneCtrl',function ($scope,Calc) {
+        //console.log(Calc["+"](1,2));
+    });
+    app.controller('twoCtrl',function ($scope,Calc) {
+       // console.log(Calc["+"](4,6));
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<!--指令 ng-开头的都叫angular的内置指令-->
+<!--增加ng-app属性后 会增加一个 根作用域$rootScope-->
+<html lang="en" ng-app>
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训http://www.zhufengpeixun.cn</title>
+</head>
+<body>
+<!--双向数据绑定 用户修改 form表单元素 input checkbox select radio textarea-->
+<!--在angular中所有的输入框 需要增加ng-model-->
+<!--默认会先在当前作用域下查找hello这个变量 将hello的值赋予给输入框-->
+<!--如果hello不存在 则会声明一个变量-->
+<input type="text" ng-model="hello">
+<!--{{hello}} {{1+3*2}}-->
+<!--大括号是ng-bind的一个简写 不会闪烁-->
+<div ng-bind="hello?hello:'welcome'"></div>
+<!--{{hello=7}}-->
+<!--{{}}表达式 (可以写三元 可以运算 可以赋值) 不可以写a++-->
+<!--将作用域上的变量取出来-->
+<script src="../node_modules/angular/angular.js"></script>
+<script>
+    //jquery  $   => angular angular
+    console.log(angular); //引入angularjs后 会赠送一个angular对象
+    //1.被动 需要angular来启动项目
+</script>
+</body>
+</html>

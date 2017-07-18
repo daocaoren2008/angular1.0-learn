@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训http://www.zhufengpeixun.cn</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+</head>
+<body>
+<div>数据<input type="text" ng-model="title"></div>
+<div>这里指令不会影响数据<panel tit="{{title}}"></panel></div>
+
+<script src="../node_modules/angular/angular.js"></script>
+<script>
+    var app = angular.module('appModule',[]);
+    app.run(['$rootScope',function ($rootScope) {
+        $rootScope.title = 'zfpx'
+    }]);
+    //@符号取得是字符串  @符是单向的
+    app.directive('panel',function () {
+        return {
+            restrict:'E',
+            template:'<input ng-model="title"/>',//通过路径 引用html
+            scope:{
+                //属性的值发生变化 会重新给指令赋新的值，
+                //如果title:'@title',因为名字一样可以省略成,title:'@'
+                title:'@tit' //scope.title = '12'
+            }
+        }
+    })
+</script>
+</body>
+</html>

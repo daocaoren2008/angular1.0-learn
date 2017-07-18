@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>模拟内置指令，双向绑定</title>
+</head>
+<body>
+<input type="text" zf-model="aa">
+{{aa}}
+<script src="../node_modules/angular/angular.js"></script>
+<script>
+    //1.ng-model不会产生作用域
+    //2.监控输入框中的输入的值 将值赋到作用域上  v->m
+    //3.监控作用域上的值，将值赋给输入框  m->v
+    var app = angular.module('appModule',[]);
+    app.run(function ($rootScope) {
+        $rootScope.aa = 'zfpx'
+    });
+    app.directive('zfModel',function () {
+        return {
+            restrict:'A',
+            link:function (scope,element,attrs) {
+                //监控输入框中的输入事件         v->m
+                element.on('input',function () {//input事件是输入事件
+                    console.log( attrs );
+                    scope[attrs.zfModel] = element.val();//因为attr不是scope的属性
+                    scope.$apply();//强制让视图刷新
+                });
+                //监控作用域上的值，将值赋给输入框 m->v
+                scope.$watch(attrs.zfModel,function (newVal) {
+                    element.val(newVal);
+                });
+            }
+        }
+    })
+</script>
+</body>
+</html>

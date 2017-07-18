@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        .color{color:red;font-size: 40px}
+        .color1{color:blue;font-size: 40px}
+        .color2{color:green;font-size: 20px}
+        .back{background: blue}
+    </style>
+</head>
+<body ng-controller="myCtrl">
+<!-- {{flag?'back':''}} 写法不好-->
+<div class="color" ng-class="{false:'',true:'back'}[flag]">angular baby</div>
+<!--{back:flag}首选 ng-class和class生效哪一个 和css书写顺序有关 -->
+<div class="color" ng-class="{color2:flag,color1:flag}">angular baby</div>
+<!--行内样式 将样式 转换成对象格式-->
+<div ng-style="{color:'blue'}">react MM</div>
+<script src="../node_modules/angular/angular.js"></script>
+<script>
+    var app = angular.module('appModule',[]);
+    app.controller('myCtrl',function ($scope) {
+        $scope.flag = true; //flag为true增加样式 否则移除样式
+        $scope.a = {background:'red',fontSize:'100px'}
+    });
+</script>
+</body>
+</html>

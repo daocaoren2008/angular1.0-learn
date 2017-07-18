@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>$http</title>
+</head>
+<body ng-controller="searchCtrl">
+<input type="text" ng-model="query">
+<ul>
+    <li></li>
+</ul>
+<script src="../node_modules/angular/angular.js"></script>
+<script>
+    var app = angular.module('appModule', []);
+    app.controller('searchCtrl', function ($scope, $http, $sce) {
+        $scope.query = '';
+        $scope.list = [];
+//        $http --$.ajax
+//        后台会返回一个方法执行，百度规定他的回调函数必须叫cb
+        $http.jsonp($sce.trustAsResourceUrl('https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd='+$scope.query), {jsonpCallbackParam: 'cb'}).then(function (res) {//第一个函数就是成功后的回调。
+//            console.log(res.data.s)
+            $scope.list = res.data.s;
+        });
+
+    })
+</script>
+</body>
+</html>

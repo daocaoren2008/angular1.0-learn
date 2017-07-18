@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body ng-controller="myCtrl">
+<!--要循环谁，就将ng-repeat写在谁身上-->
+<ul>
+    <!--b是我们arrs中的某一项 单个in 多个,会产生作用域-->
+    <!--<li ng-repeat="b in arrs">{{b}}</li>-->
+    <!--可以将in前面的(key,value) in arrs-->
+    <!--<li ng-repeat="(key,b) in arrs">{{key}}{{b}}</li>-->
+    <!--<li ng-repeat="(key,b) in arrs">{{$index}}{{b}}</li>-->
+    <!--是否是第一个-->
+    <!--<li ng-repeat="(key,b) in arrs">{{$first}}{{b}}</li>-->
+    <!--是否是奇数-->
+    <!--<li ng-repeat="(key,b) in arrs">{{$even}}{{b}}</li>-->
+    <!--<li ng-repeat="(key,b) in arrs">{{$odd}}{{b}}</li>-->
+    <!--<li ng-repeat="(key,b) in arrs">{{$middle}}{{b}}</li>-->
+    <!--track by key 按照索引遍历，防止因为值相同angular无法遍历-->
+    <li ng-repeat="(key,b) in arrs track by key">{{$last}}{{b}}</li>
+</ul>
+<ul>
+    <li ng-repeat="b in iphones track by $index">
+        <ul>{{b.product}}
+            <li ng-repeat="c in b.type track by $index">{{c}}</li>
+        </ul>
+    </li>
+</ul>
+<script src="../node_modules/angular/angular.min.js"></script>
+<script>
+    var app = angular.module('appModule', []);
+
+    app.controller("myCtrl", ['$scope', '$rootScope', function ($scope) {
+        $scope.arrs = ['苹果', '葡萄', '香蕉', '香蕉'];
+        $scope.iphones = [
+            {
+                product: 'Nokia', type: ['5230', 'n97', 'n98']
+            },
+            {
+                product: '苹果', type: ['inphone3', 'iphone4', 'inphone5']
+            }
+        ];
+    }])
+</script>
+</body>
+</html>

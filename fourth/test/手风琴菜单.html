@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<list-group>
+    <list-one type="主食">米饭，烧饼，馒头</list-one>
+    <list-one type="蔬菜">豆角，西红柿，黄瓜</list-one>
+    <list-one type="水果">苹果，香蕉，猕猴桃</list-one>
+</list-group>
+<list-group>
+    <list-one type="主食">米饭，烧饼，馒头</list-one>
+    <list-one type="蔬菜">豆角，西红柿，黄瓜</list-one>
+    <list-one type="水果">苹果，香蕉，猕猴桃</list-one>
+</list-group>
+<script src="../../node_modules/angular/angular.js"></script>
+<script>
+    var app = angular.module('appModule', []);
+    app.directive('listGroup', function () {
+        return {
+            restrict: 'E',
+//            template: `<div class="list-group"></div>`,
+            controller: function ($scope) {
+                $scope.list = [];
+                this.collect = function (s) {
+                    $scope.list.push(s);
+                };
+                this.tell = function (s) {
+                    $scope.list.forEach(function (item) {
+                        if (item != s) {
+                            item.flag = false;
+                        }
+                    })
+                }
+            },
+            scope: {}
+
+        }
+    });
+    app.directive('listOne', function () {
+        return {
+            restrict: 'E',
+            require:'^?listGroup',
+            templateUrl: 'tmpl/open.html',
+            transclude: true,
+            link: function (scope, element, arrs, groupCtrl) {
+                groupCtrl.collect(scope);//groupCtrl为实例化的父指令的controller
+                scope.flag = false;
+                scope.toggle = function () {//为什么把事件写到scope上而不是element上？
+                    groupCtrl.tell(scope);
+                    scope.flag = !scope.flag;//对作用域的flag取反
+                }
+            },
+            scope: {
+                title: '@type'
+            }
+        }
+
+    })
+</script>
+</body>
+</html>

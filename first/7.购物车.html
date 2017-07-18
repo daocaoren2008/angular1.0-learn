@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>购物车</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+</head>
+<body ng-controller="myCtrl">
+<div class="container">
+    <table class="table table-bordered table-hover text-center">
+        <caption class="h2 text-right">购物车</caption>
+        <tr>
+            <th class="text-center text-success"><input type="checkbox">全选</th>
+            <th class="text-center text-success">商品名称</th>
+            <th class="text-center text-success">商品价格</th>
+            <th class="text-center text-success">商品数量</th>
+            <th class="text-center text-success">小计</th>
+            <th class="text-center text-success">操作</th>
+        </tr>
+        <tr ng-repeat="product in products track by $index">
+            <td><input type="checkbox"></td>
+            <td>{{product.productName}}</td>
+            <td>{{product.productPrice}}</td>
+            <td>
+                <button ng-click="product.count=product.count-1" ng-disabled="product.count==1">-</button>
+                <input type="text" ng-model="product.count">
+                <button ng-click="product.count=product.count+1">+</button>
+            </td>
+            <td>{{product.productPrice*product.count}}
+            </td>
+            <td>
+                <button class="btn btn-danger" ng-click="remove(product)">删除</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6" class="text-right">
+                总价：{{sum()}}
+                <select>
+                    <option value=""></option>
+                </select>
+                折后价：
+            </td>
+        </tr>
+    </table>
+    <form>
+        <div class="form-group">
+            <label for="productName" class="control-label">商品名称</label>
+            <input type="text" id="productName" class="form-control" ng-model="product.productName">
+        </div>
+        <div class="form-group">
+            <label for="productPrice" class="control-label">商品价格</label>
+            <input type="text" id="productPrice" class="form-control" ng-model="product.productPrice">
+        </div>
+        <div class="form-group text-right">
+            <button type="button" class="btn btn-primary" ng-click="addProduct()">添加</button>
+            <button type="reset" class="btn btn-warning" ng-click="reset()">重置</button>
+        </div>
+    </form>
+</div>
+
+
+<script src="../node_modules/angular/angular.min.js"></script>
+<script>
+    var app = angular.module('appModule', []);
+    app.controller('myCtrl', ['$scope', '$rootScope', function ($scope) {
+        $scope.product = {};//初始化一个添加的对象
+        $scope.products = [
+            {productName: '电热毯', productPrice: 99, count: 10, isSelected: true},
+            {productName: '热水袋', productPrice: 30, count: 80, isSelected: false}
+        ];
+        //删除
+        $scope.remove = function (p) {
+            $scope.products = $scope.products.filter(function (item) {
+                return item != p;
+            })
+        };
+        //添加
+        $scope.addProduct = function () {
+            if (Object.keys($scope.product).length != 2)return false;
+            $scope.product.count = 1;
+            $scope.products.push($scope.product);
+            $scope.product = {};
+        };
+        $scope.reset = function () {
+            $scope.product = {};
+        };
+        $scope.sum = function () {
+            var num = 0;
+            $scope.products.forEach(function (item) {
+                num += item.productPrice * item.count;
+            })
+            return num;
+        };
+
+        $scope.discounts = [
+            {val:'0.1',content:'打一折'},
+            {val:'0.3',content:'打三折'},
+            {val:'0.5',content:'打五折'}
+        ];
+    }])
+</script>
+</body>
+</html>

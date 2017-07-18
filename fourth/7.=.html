@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训http://www.zhufengpeixun.cn</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+</head>
+<body>
+<div>数据<input type="text" ng-model="title"></div>
+<div>这里指令可以影响数据<panel tit="title"></panel></div>
+<!--<panel tit="{{title}}"></panel> 变量不应该是用表达式吗？-->
+<!--对比6.@.html发现是跟下面指令有关系，指令中使用等号引用变量，这里就得这么写，着是固定写法-->
+<div tit="{{title}}">看div的属性值</div>
+<script src="../node_modules/angular/angular.js"></script>
+<script>
+    var app = angular.module('appModule',[]);
+    app.run(['$rootScope',function ($rootScope) {
+        $rootScope.title = 'zfpx'
+    }]);
+    //@符号取得是字符串  @符是单项的
+    //=号传递的是变量    =是双向的
+    app.directive('panel',function () {
+        return {
+            restrict:'E',
+            template:'<input ng-model="title"/>',//通过路径 引用html
+//            transclude:true,
+            scope:{
+                //属性的值发生变化 会重新给指令赋新的值
+                title:'=tit' //scope.title =$rootScope.title
+            }
+        }
+    })
+
+</script>
+
+</body>
+</html>

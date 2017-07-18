@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训http://www.zhufengpeixun.cn</title>
+    <style>
+        .show{display: block}
+        .hide{display: none}
+    </style>
+</head>
+<body>
+<!--ng-hide或者ng-show操作的是样式-->
+<!--ng-if操作的是dom元素 （会产生一个作用域）如果if为false则内部代码不执行-->
+<list-group>
+    <list-one type="主食">米饭，烧饼，馒头</list-one>
+    <list-one type="蔬菜">豆角，西红柿，肉</list-one>
+    <list-one type="水果">西瓜，香蕉，橘子</list-one>
+</list-group>
+<list-group>
+    <list-one type="主食">米饭，烧饼，馒头</list-one>
+    <list-one type="蔬菜">豆角，西红柿，肉</list-one>
+    <list-one type="水果">西瓜，香蕉，橘子</list-one>
+</list-group>
+<!--增加list-group指令，用来控制list-one两个指令-->
+<!--list-group 收集两个list-one的scope -->
+<!--点击某一个one的时候，告诉父亲当前点击的是我，其他的都关闭掉-->
+<script src="../node_modules/angular/angular.js"></script>
+<script>
+    var app = angular.module('appModule',[]);
+    app.directive('listGroup',function () {
+       return {
+           restrict:'E',
+           controller:function ($scope) {
+//               console.log($scope);
+               $scope.lists = [];
+               this.collect = function (s) {
+                   $scope.lists.push(s); //收集两个人作用域 可以控制两个人的flag属性
+               };
+               this.tell = function (s) {
+                   $scope.lists.forEach(function (item) {
+                       if(s!=item){
+                           item.flag = false;
+                       }
+                   });
+               }
+           },
+           scope:true//创建一个作用域，子指令把自己的作用域传到对应的父标签的作用域。否则父指令的作用域是根作用域，所有指令将公用一个父作用域。
+       }
+    });
+    app.directive('listOne',function () {
+        return {
+            restrict:'E',
+            require:'^?listGroup', //加上?如果找不到则是null
+            templateUrl:'tmpl/open.html',
+            transclude:true,
+            link:function (scope,element,attrs,groupCtrl) {
+                groupCtrl.collect(scope);
+                scope.flag = false;
+                scope.toggle = function () { //点击时 告诉父亲 自己是谁，除了自己的都关闭掉
+                    groupCtrl.tell(scope); //将自己的作用域传到父亲那
+                    scope.flag =!scope.flag
+                }
+            },
+            scope:{
+                title:'@type'
+            }
+        }
+    });
+    /*app.controller('toggleCtrl',function ($scope) {
+        $scope.flag = true;
+        $scope.toggle = function () {
+            $scope.flag =! $scope.flag;
+        }
+    })*/
+</script>
+</body>
+</html>

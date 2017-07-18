@@ -1,0 +1,24 @@
+<div class="col-md-6 col-md-offset-3">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <span ng-show="flag">{{book.bookName}}</span>
+            <input ng-hide="flag" type="text" ng-model="temp.bookName">
+            <a href="#!/list" class="btn btn-default pull-right btn-xs">返回</a>
+        </div>
+        <!--img 使用src会导致404错误，使用ng-src，可以懒加载不报错。-->
+        <div class="panel-body text-center"><img ng-src="{{book.bookCover}}" alt=""></div>
+        <div class="panel-footer">
+            <span ng-show="flag">{{book.bookPrice | currency:'¥'}}</span>
+            <input ng-hide="flag" type="text" ng-model="temp.bookPrice">
+            <button ng-show="flag" class="btn btn-warning" ng-click="changeFlag()">修改</button>
+            <button ng-show="flag" class="btn btn-denger" ng-click="remove()">删除</button>
+            <button class="btn btn-success" ng-hide="flag" ng-click="update()">确认</button>
+            <button class="btn btn-default" ng-hide="flag" ng-click="cancel()">取消</button>
+        </div>
+    </div>
+</div>
+<style>
+    .panel {
+        height: 300px;
+    }
+</style>

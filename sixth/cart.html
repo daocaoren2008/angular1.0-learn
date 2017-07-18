@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>hello</title>
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css">
+</head>
+<body ng-controller="cartCtrl">
+<div class="text-danger h2 text-center">我的书架</div>
+<div class="container">
+    <table class="table table-bordered text-center">
+        <tr>
+            <th class="text-center">序号</th>
+            <th class="text-center">书名</th>
+            <th class="text-center">价格</th>
+            <th class="text-center">数量</th>
+            <th class="text-center">小计</th>
+            <th class="text-center">操作</th>
+        </tr>
+        <tr ng-repeat="book in books track by $index">
+            <td>{{book.id}}</td>
+            <td>{{book.bookName}}</td>
+            <td>{{book.price | currency:'¥'}}</td>
+            <td>
+                <button ng-click="book.count=book.count-1">-</button>
+                <input type="text" ng-model="book.count">
+                <button ng-click="book.count=book.count+1">+</button>
+            </td>
+            <td>{{book.price*book.count}}</td>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"
+                        ng-click="triggerUpdate(book)">
+                    修改
+                </button>
+                <button class="btn btn-danger" ng-click="remove(book)">删除</button>
+            </td>
+        </tr>
+    </table>
+    <form>
+        <div class="form-group">
+            <label for="bookName" class="control-label">书名</label>
+            <input type="text" id="bookName" class="form-control" ng-model="pro.bookName" autocomplete="off">
+        </div>
+        <div class="form-group">
+            <label for="bookPrice" class="control-label">价格</label>
+            <input type="text" id="bookPrice" class="form-control" ng-model="pro.price" autocomplete="off">
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" ng-click="add()">提交</button>
+        </div>
+
+    </form>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">修改内容</h4>
+            </div>
+            <div class="modal-body">
+                名称：<input type="text" ng-model="temp.bookName">
+                价格：<input type="text" ng-model="temp.price">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" ng-click="update(temp)">确认修改</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--服务端读取页面时，angular必须放到根目录-->
+<script src="node_modules/jquery/dist/jquery.js"></script>
+<script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+<script src="node_modules/angular/angular.js"></script>
+<!--先引angular 再引resource-->
+<script src="node_modules/angular-resource/angular-resource.js"></script>
+<script>
+    var app = angular.module('appModule', ['ngResource']);//[]添加依赖的模块,用字符串引入
+    app.factory('Books', function ($resource) {
+        return $resource('/book/:id', null, {//'/book/:id',请求的路径
+            update: {method: 'PUT'}//增加一个方法
+        })
+    });
+    //    /book/:id
+    app.controller('cartCtrl', function ($scope, Books) {//Books代表的是factory return出来的函数
+        $scope.update = function () {
+//            第一个参数是修改的Id，第二个是修改成什么
+            Books.update({id: $scope.temp.id}, $scope.temp).$promise.then(function (data) {
+//                map 映射 映射成我们想要的内容
+                $scope.books = $scope.books.map(function (item) {
+                    if (item.id == $scope.temp.id) {
+                        return $scope.temp;
+                    } else {
+                        return item;
+                    }
+                });
+                $('#myModal').modal('hide')
+            });
+        };
+        $scope.triggerUpdate = function (b) {
+//            克隆对象
+            $scope.temp = JSON.parse(JSON.stringify(b));
+        };
+        $scope.add = function () {
+            $scope.pro.count = 1;//在需要增加的对象上 添加数量
+            Books.save($scope.pro).$promise.then(function (data) {//res是后天返回添加成功的那一项。
+                $scope.books.push(data);
+            });
+        };
+        $scope.remove = function (book) {
+            //通知后台删除数据，当后台数据删除以后，需要通知前台
+            Books.delete({id: book.id}).$promise.then(function () {//$promise
+//              当服务端返回空对象后会调用的当前方法
+                $scope.books = $scope.books.filter(function (item) {
+                    return item.id != book.id;//
+                })
+            });
+//
+        };
+//        获取所有
+        $scope.books = Books.query();//服务器返回数组 //GET /book/
+    })
+</script>
+</body>
+</html>

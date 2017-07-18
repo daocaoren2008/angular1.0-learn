@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>hello</title>
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css">
+</head>
+<body ng-controller="myCtrl">
+<div class="text-danger h2 text-center">hello</div>
+<ul class="list-group">
+    <li class="list-group-item" ng-repeat="u in users">
+        {{u.username}}:{{u.password}}
+    </li>
+</ul>
+<!--服务端读取页面时，angular必须放到根目录-->
+<script src="node_modules/angular/angular.js"></script>
+<script src="node_modules/angular-resource/angular-resource.js"></script>
+<script>
+    var app = angular.module('appModule', ['ngResource']);//[]添加依赖的模块,用字符串引入
+//    封装一个方法，我们需要创建一个对用户操作的服务,使用angular-resource提供的服务
+    app.factory('Users',['$resource',function ($resource) {
+//        1.路径 表示请求的路径
+//        2.默认参数 null
+//        3.增加的方法
+//        console.log($resource);
+/*        $resource('/users/:bid,null',{//冒号表示可有可无的参数
+            update:{method:'PUT'}
+        });//返回一个函数，（包含增删改查）*/
+        return $resource('/users/:bid,null',{
+            update:{method:'PUT'}
+        });
+
+    }]);
+
+    app.controller('myCtrl', function ($scope, $http,Users) {
+        $http.get('/getUser').then(function (res) {
+            console.log(res)
+            $scope.users = res.data;
+        }, function (err) {
+
+        })
+    })
+</script>
+</body>
+</html>

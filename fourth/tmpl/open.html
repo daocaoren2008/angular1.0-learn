@@ -1,0 +1,12 @@
+<div class="box">
+    <div class="title" ng-click="toggle()">
+        {{title}}
+    </div>
+    <div ng-show="flag" class="content" ng-transclude>
+    </div>
+</div>
+<style>
+    .box div{padding:10px;}
+    .title{width: 200px;height: 36px;line-height: 36px;background: pink;border-bottom:1px solid #fff;}
+    .content{width: 200px;height: 100px;background: palevioletred}
+</style>

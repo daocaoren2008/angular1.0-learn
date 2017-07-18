@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" ng-app>
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训http://www.zhufengpeixun.cn</title>
+    <style>
+        [ng-cloak]{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<input type="text" ng-model="name">
+<input type="text" ng-model="age">
+<input type="text" ng-model="age1">
+<input type="text" ng-model="age12">
+<input type="text" ng-model="age13">
+<!--防止一大段代码闪烁 ng-cloak 当angular加载后会移除掉ng-cloak属性-->
+<!--给ng-cloak的所用标签先隐藏掉-->
+<div ng-cloak>
+    <li>{{name}}</li>
+    {{age}} {{age1}} {{age12}} {{age13}}
+</div>
+
+<script src="../node_modules/angular/angular.js"></script>
+</body>
+</html>

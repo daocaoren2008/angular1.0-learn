@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训http://www.zhufengpeixun.cn</title>
+</head>
+<body>
+<div ng-controller="oneCtrl"></div>
+<div ng-controller="twoCtrl"></div>
+<script src="node_modules/angular/angular.js"></script>
+<script>
+    var app = angular.module('appModule',[]);
+    app.provider('Storage',function () {
+        this.$get = function () {
+           return {
+               setStorage:function (key,value) {
+                    if(typeof value =='object'){
+                        value = JSON.stringify(value);
+                    }
+                    localStorage.setItem(key,value);
+               },
+               getStorage:function(key){
+                   var str = localStorage.getItem(key);
+                   if(str.startsWith('{')||str.startsWith('[')){
+                       str = JSON.parse(str);
+                   }
+                   return str;
+               }
+           }
+        }
+    });
+    app.controller('oneCtrl',function ($scope,Storage) {
+        Storage.setStorage('name',{name:'jw'});
+//      name:  {name:'zfpx'}
+        //cookie session localStorage sessionStorage
+        //localStorage.setItem('name',JSON.stringify({name:'zfpx'}));
+    });
+    app.controller('twoCtrl',function ($scope,Storage) {
+        console.log(Storage.getStorage('name').name)
+//       age： {age:8}
+        //console.log(JSON.parse(localStorage.getItem('name')));
+    });
+</script>
+
+</body>
+</html>

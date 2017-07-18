@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>循环对象</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+</head>
+<body ng-controller="myCtrl">
+<!--要循环谁，就将ng-repeat写在谁身上-->
+
+<ul>
+    <!--<li ng-repeat="s in school track by $index">-->
+    <!--{{s}}-->
+    <!--</li>  -->
+    <li ng-repeat="(key,s) in school">
+        {{key}}:{{s}}
+    </li>
+</ul>
+<br>
+<div class="container">
+    <table class="table table-bordered text-center table-hover">
+        <caption class="h2 text-right">购物车</caption>
+        <tr class="text-success">
+            <td><input type="checkbox" ng-model="selectAll" ng-click="all()">全选</td>
+            <th class="text-center">商品名称</th>
+            <th class="text-center">商品价格</th>
+            <th class="text-center">商品数量</th>
+            <th class="text-center">小计</th>
+            <th class="text-center">操作</th>
+        </tr>
+        <tr ng-repeat="(key,product) in products track by key">
+            <!--<td ng-repeat="(key,value) in product">-->
+            <!--{{value=='count'?'<input type="text">':value}}-->
+            <!--</td>-->
+            <td><input type="checkbox" ng-model="product.isSelected" ng-click="one()"></td>
+            <td>{{product.productName}}</td>
+            <td>{{product.productPrice}}</td>
+            <td>
+                <!--disabled表示禁用 ，readonly表示只读-->
+                <!-- ，输入框得到的是字符串，-0自动类型转换 -->
+                <button ng-click="product.count=product.count-0-1" ng-disabled="product.count==1">-</button>
+                <input type="text" ng-model="product.count" ng-readonly="true">
+                <button ng-click="product.count=product.count-0+1">+</button>
+            </td>
+            <td>{{product.productPrice*product.count}}</td>
+            <td>
+                <button class="btn btn-danger btn-sm" ng-click="remove(product,$index)">删除</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6" class="text-right">
+                <!--作用域上任何之发生变化 都会执行sum函数，将sum函数的结果显示在页面上-->
+                总价:{{sum()}}
+                折扣:<select name="" id="" ng-model="sale">
+                <option value="{{dis.val}}" ng-repeat="dis in discounts">{{dis.content}}</option>
+            </select>
+                折后价:{{sum()*sale | currency:'RMB'}}
+            </td>
+        </tr>
+    </table>
+    <form>
+        <!--ng-model 可以采用product.name表示在作用域上声明一个product对象，并且对象上有name属性-->
+        <div class="form-group">
+            <label for="productName" class="control-label">商品名称</label>
+            <input type="text" id="productName" class="form-control" placeholder="请输入商品名称"
+                   ng-model="product.productName">
+        </div>
+        <div class="form-group">
+            <label for="productPrice" class="control-label">商品价格</label>
+            <input type="text" id="productPrice" class="form-control" placeholder="请输入商品价格"
+                   ng-model="product.productPrice">
+        </div>
+        <div class="form-group text-right">
+            <button type="button" class="btn btn-primary" ng-click="addProduct()">添加</button>
+            <button type="reset" class="btn btn-warning" ng-click="reset()">重置</button>
+        </div>
+
+    </form>
+</div>
+<script src="../node_modules/angular/angular.min.js"></script>
+<script>
+    //html使用变量不用加$scope,
+    var app = angular.module('appModule', []);
+    //可以采用数组的形式 防止形参压缩
+    //压缩会导致形参名 更改，代码报错
+    app.controller("myCtrl", ['$scope', '$rootScope', function ($scope) {
+        $scope.sale = '0.5';//赋值默认值，默认让下来菜单选第一个。
+        $scope.product = {};
+        $scope.school = {name: "珠峰", age: 8, address: "回龙观东大街西行200米"};
+        $scope.products = [
+            {productName: '电热毯', productPrice: 99, count: 10, isSelected: true},
+            {productName: '热水袋', productPrice: 30, count: 80, isSelected: false}
+        ];
+//        删除
+        $scope.remove = function (p, c) {//p代表的是当前点击的是那一条数据
+            console.log(this, p, c);
+            //filter返回一个新数组，
+            $scope.products = $scope.products.filter(function (item, index) {
+                return item != p;
+            })
+        };
+//      增加
+        $scope.addProduct = function () {
+            //判断对象中有几个属性
+            console.log(Object.keys($scope.product))//es5方法
+
+//            if (!$scope.product || !$scope.product.productName || !$scope.product.productPrice) return false;
+            if (Object.keys($scope.product).length != 2) return false;
+            $scope.product.count = 1;
+            $scope.products.push($scope.product);
+            $scope.product = {};
+
+        };
+//        重置
+        $scope.reset = function () {
+            $scope.product = {};
+        };
+//        求和
+        $scope.sum = function () {
+            var total = 0;
+            $scope.products.forEach(function (item) {
+                total += item.productPrice * item.count;
+            })
+            return total;
+        };
+        $scope.discounts = [
+            {val: '0.5', content: '打五折'},
+            {val: '0.3', content: '打三折'},
+            {val: '0.2', content: '打两折'},
+            {val: '0.1', content: '打一折'}
+        ];
+        //全选，全不选
+        //1、点击全选，如果为为选中状态则全部勾上，否则相反
+        //2、低级下面的checkbox 如果有一个没选中，则全选状态未选中，否则相反
+        $scope.all = function () {
+            console.log($scope.selectAll);
+            $scope.products.forEach(function (item, index) {
+                //
+                item.isSelected = $scope.selectAll;
+            })
+        };
+        $scope.one = function () {
+//            find 如果返回true表示找到了不会继续查找， 如果一致返回false 就是没有找到undefined
+            var item = $scope.products.find(function (item) {
+                return !item.isSelected;
+            });
+            //item 有内容 表示有false，selectAll为false
+            $scope.selectAll = item ? false : true;
+        }
+        $scope.one();//默认先查一次，函数执行要放到定义后面
+    }])
+</script>
+</body>
+</html>

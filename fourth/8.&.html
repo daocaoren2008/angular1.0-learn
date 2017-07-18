@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训http://www.zhufengpeixun.cn</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+</head>
+<body>
+<input type="text" ng-model="title">
+<panel ss="say(a,b)"></panel>
+<script src="../node_modules/angular/angular.js"></script>
+<script>
+    //指令中拥有独立作用域，在html中通过属性将方法传递到指令中，
+    //传递的时候需要用-->属性="作用域上的方法()",在js中指令使用&符号来接收
+
+    var app = angular.module('appModule',[]);
+    app.run(['$rootScope',function ($rootScope) {
+        $rootScope.say = function (who,where) {
+            alert(who);
+            alert(where)
+        }
+    }]);
+    app.directive('panel',function () {
+        return {
+            restrict:'E',
+            /*为什么这里的方法传值不能直接用字符串，'你好' ？因为这里函数是传进来的，比较特殊。*/
+            template:`<button ng-click="ss({a:'你好',b:'不好'})">say</button>`,
+//            template:'<button ng-click="s({a:\'你好\'})">say</button>',
+            scope:{
+                ss:'&'
+            }
+        }
+    })
+</script>
+</body>
+</html>

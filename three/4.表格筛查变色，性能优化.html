@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>优化脏值检查</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+</head>
+<body>
+<!--优化性能，不必实时进行脏值检查-->
+<!--<input type="text" ng-model="query" ng-model-option="{debounce:1000}">-->
+<!--1秒以后 改变数据-->
+<input type="text" ng-model="query" ng-model-option="{undateOn:'blur}">
+<!--当输入框失去焦点后刷新数据，-->
+<div ng-controller="orderCtrl">
+    <table class="table table-bordered">
+        <tr>
+            <td>序号</td>
+            <th>姓名</th>
+            <th>数学</th>
+            <th>语文</th>
+            <th>英语</th>
+        </tr>
+        <tr ng-repeat="score in scores">
+            <td>{{$index+1}}</td>
+            <td>{{score.name}}</td>
+            <td ng-bind-html="score.math | changeColor:query| asHtml"></td>
+            <td ng-bind-html="score.chinese | changeColor:query| asHtml"></td>
+            <td ng-bind-html="score.english | changeColor:query| asHtml"></td>
+        </tr>
+    </table>
+</div>
+<script src="../node_modules/angular/angular.js"></script>
+<script>
+    var app = angular.module('appModule', []);
+    //
+    app.run(function ($rootScope) {
+        $rootScope.name = '<h1>Handsom</h1>';
+        $rootScope.p = '<p>hello</p>';
+    });
+    //
+    app.filter('asHtml', function ($sce) {//$sce angular给我们提供的一个方法
+        return function (data) {
+            return $sce.trustAsHtml(data.toString());//数字不能使用trustAsHtml
+        }
+    });
+
+    app.filter('changeColor', function () {
+        return function (data, param1) {
+//            console.log(data, param1);
+            if (typeof param1 != 'undefined') {
+                param1 = param1.replace(/\s/g, '');//去空格
+                if (param1 != '') {
+                    var reg = new RegExp(param1,'g');//根据输入框内容 创造正则
+                    //将数值转成字符串再替换
+                    data = data.toString().replace(reg, function () {
+//                        return `<font color="red" ng-bind-html="arguments[0] | asHtml"></font>`;
+                        return `<font color="red">${arguments[0]}</font>`;
+                    });
+                }
+            }
+            return data;
+        }
+    });
+    app.controller('orderCtrl', ['$scope', function ($scope) {
+        $scope.scores = [
+            {name: '张三', math: 118, english: 30, chinese: 40},
+            {name: '李四', math: 62, english: 67, chinese: 66},
+            {name: '王五', math: 78, english: 89, chinese: 66},
+            {name: '赵六', math: 120, english: 77, chinese: 88},
+        ];
+    }])
+</script>
+</body>
+</html>

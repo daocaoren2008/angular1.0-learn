@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训http://www.zhufengpeixun.cn</title>
+    <style>
+        [ng-cloak]{display: none;}
+    </style>
+</head>
+<body>
+<div ng-controller="eventCtrl">
+    <!--所有angular的事件 在以前的基础上去掉on增加ng- (后面要指定一个函数名，定义在作用域上) 事件中可以传递事件源对象$event代表的就是当前事件源-->
+    <input type="text" ng-keyup="addFruit($event)" ng-model="food">
+    <ul ng-cloak>
+        <li ng-repeat="(key,fruit) in fruits track by key">{{fruit}}</li>
+    </ul>
+</div>
+<script src="../node_modules/angular/angular.js"></script>
+<script>
+    var app = angular.module('appModule',[]);
+    app.controller('eventCtrl',['$scope',function ($scope) {
+        $scope.fruits = ['香蕉','苹果','橘子'];
+        $scope.addFruit = function(e) {
+            var keyCode = e.keyCode;
+            if(keyCode==13){
+                //取到输入框中的内容，将内容 放置到fruits的数组中
+                $scope.fruits.push($scope.food);//上面取值时不需要加$scope下面获取时 一律使用$scope？？？？？
+                $scope.food = ''; //输入后清空输入框中的内容
+            }
+        }
+    }]);
+</script>
+</body>
+</html>

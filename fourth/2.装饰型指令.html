@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训http://www.zhufengpeixun.cn</title>
+</head>
+<body>
+<div color-red>hello zpfx</div>
+<div drag></div>
+<script src="../node_modules/angular/angular.js"></script>
+<script>
+    var app = angular.module('appModule',[]);
+    app.directive('colorRed',function () {
+        return {
+            restrict:'A',//限制范围
+            //操作dom
+            link:function (scope,element,attrs) { //链接 连接作用域和视图的
+                //scope代表当前指令所在作用域，指令没有创建作用域，使用的是上一级
+                //element当前指令所在的元素,angular中要求增加单位px
+                element.css({'color':'red','font-size':'100px'});
+                //attr 代表的是当前指令上的所有属性
+                console.log(attrs);
+                //1.mousedown mousemove mouseup   //DOMMouseScroll  mousewheel
+            }
+        }
+    })
+</script>
+</body>
+</html>

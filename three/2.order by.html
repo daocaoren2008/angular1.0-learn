@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训http://www.zhufengpeixun.cn</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+</head>
+<body>
+<div ng-controller="orderCtrl">
+    <!--在当前作用域下创建一个query属性-->
+    <input type="text" ng-model="query" ng-change="change()">
+    <!--当输入内容时需要筛查-->
+    <select ng-model="subject" ng-change="change()">
+        <!--当下拉菜单更改时需要筛查-->
+        <option value="0">数学</option>
+        <option value="1">英语</option>
+        <option value="2">语文</option>
+    </select>
+    选项:{{subject}}
+    <table class="table table-bordered">
+        <tr>
+            <td>序号</td>
+            <th>姓名</th>
+            <th ng-click="language='math';flag=!flag">数学</th>
+            <th ng-click="language='chinese';flag=!flag">语文</th>
+            <th ng-click="language='english';flag=!flag">英语</th>
+        </tr>
+        <!--根据数学排序 scores | orderBy:'math':true 最后一个参数（是否倒序）-->
+        <!--<tr ng-repeat="score in scores | orderBy:'math':true track by $index">-->
+        <!--filter后面可以跟一个对象 指定在哪个字段中查询-->
+        <tr ng-repeat="score in scores | orderBy:language:flag | filter:obj track by $index">
+            <td>{{$index+1}}</td>
+            <td>{{score.name}}</td>
+            <td>{{score.math}}</td>
+            <td>{{score.chinese}}</td>
+            <td>{{score.english}}</td>
+        </tr>
+    </table>
+</div>
+<script src="../node_modules/angular/angular.js"></script>
+<script>
+    var app = angular.module('appModule',[]);
+    app.controller('orderCtrl',['$scope',function ($scope) {
+        $scope.obj = {math:$scope.query}; //默认设置一个math对象
+        $scope.change = function () { //根据下拉菜单的选择 获取对应的值做处理
+            var str = '';
+            switch ($scope.subject) {
+                case '0':
+                    str="math";
+                    break;
+                case '1':
+                    str="english";
+                    break;
+                case '2':
+                    str="chinese"
+            }
+            $scope.obj = {}; //清空默认值
+            $scope.obj[str] = $scope.query; //增加新的属性
+        };
+        $scope.subject = '0';
+        $scope.scores = [
+            {name:'张三',math:118,english:30,chinese:40},
+            {name:'李四',math:62,english:67,chinese:66},
+            {name:'王五',math:78,english:89,chinese:66},
+            {name:'赵六',math:120,english:77,chinese:88}
+        ];
+        //将数据渲染成表格
+    }])
+</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰书店</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+    <style>
+        .footer {
+            position: fixed;
+            bottom: 0px;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            background-color: #333;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<nav class="nav navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a href="#!/" class="navbar-brand">珠峰书店</a>
+        </div>
+        <div>
+            <ul class="nav navbar-nav ">
+                <li><a href="#!/">首页</a></li>
+                <li><a href="#!/list">列表页</a></li>
+                <li><a href="#!/add">添加页</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div ng-view></div>
+        </div>
+    </div>
+</div>
+<footer class="text-center footer">
+    &copy;课程内容版权均归 北京珠峰世纪技术培训有限公司 所有
+</footer>
+<script src="node_modules/angular/angular.js"></script>
+<script src="node_modules/angular-resource/angular-resource.js"></script>
+<script src="node_modules/angular-route/angular-route.js"></script>
+<script src="js/controller.js"></script>
+<script>
+    // ngResource 和 ngRoute先执行
+    //    多模块之间的依赖
+    var app = angular.module('appModule', ['ngResource', 'ngRoute', 'controller']);
+    //    路由基于配置的
+    app.config(function ($routeProvider) {
+        $routeProvider.when('/', {
+            templateUrl: 'tmpl/home.html',
+            controller: 'homeCtrl'
+        }).when('/add', {
+            templateUrl: 'tmpl/add.html',
+            controller: 'addCtrl'
+        }).when('/list', {
+            templateUrl: 'tmpl/list.html',
+            controller: 'listCtrl'
+        }).when('/detail/:id', {//表示id必须有，但是随机的
+            templateUrl: 'tmpl/detail.html',
+            controller: 'detailCtrl'
+        }).otherwise('/')
+    });
+    //    控制器的定义要写在config外面,可以将控制器的逻辑单独抽取成一个文件（模块）
+    //    公用方法，实现了对书的增删改查
+    //我们需要创建一个对用户操作的服务，使用angular-resource提供给我们的服务
+    app.factory('Books', function ($resource) {
+//        $resource是ajax提交
+        return $resource('/book/:id', null, {
+            update: {
+                method: 'PUT'
+            }
+        });//
+    })
+</script>
+</body>
+</html>

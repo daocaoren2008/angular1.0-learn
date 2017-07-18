@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="zfModule">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div ng-controller="firstCtrl">{{son}},{{aaa}}</div>
+<div ng-controller="secondCtrl">{{son}}</div>
+
+<script src="../node_modules/angular/angular.min.js"></script>
+<script>
+    var app = angular.module('zfModule', []);
+    app.run(function ($rootScope) {
+        $rootScope.aaa = 100;
+    })
+    app.controller('firstCtrl', function ($scope) {
+        $scope.son = 'Tom';
+    });
+    app.controller('secondCtrl', function ($scope) {
+        $scope.son = 'Lily';
+    });
+
+</script>
+</body>
+</html>

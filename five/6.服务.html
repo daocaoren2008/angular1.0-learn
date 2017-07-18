@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训http://www.zhufengpeixun.cn</title>
+</head>
+<body>
+<div ng-controller="oneCtrl"></div>
+<div ng-controller="twoCtrl"></div>
+<!--
+1.angular中提供了五种服务 用的时候 我一般采用factory
+provider,"factory",service,constant,value
+-->
+<script src="../node_modules/angular/angular.js"></script>
+<script>
+    var app = angular.module('appModule',[]);
+    //1.放置在根作用域上
+    //1）默认provider会被实例化
+    //2）当我们在控制器中使用服务会调用他的$get方法
+    //1.provider是最大的服务，可以进行配置
+    app.config(function (CalcProvider) {
+        //CalcProvider 是Calc声明的函数的实例
+        CalcProvider.currency = 'RMB'; //会等provider创建好实例后进行配置
+    });
+    //localStorage
+    app.provider('Calc',function () {//1.param1服务的名字
+        this.currency = '$';
+        this.$get = function () {
+            return { //用来公用的对象
+                "+": (a,b)=>this.currency+(a+b)
+            }
+        }
+    });
+    app.controller('oneCtrl',function ($scope,Calc) {// Calc代表的是$get函数的返回值
+        console.log(Calc["+"](1,2));
+    });
+    app.controller('twoCtrl',function ($scope,Calc) {
+        console.log(Calc["+"](4,6));
+    });
+</script>
+
+</body>
+</html>

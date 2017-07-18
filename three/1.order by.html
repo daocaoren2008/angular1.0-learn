@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>排序 </title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+</head>
+<body>
+<p>页面上控制器不要复用，没有什么作用，虽然名字相同但是也是不同的作用域</p>
+<div ng-controller="orderCtrl">
+    <input type="text" ng-model="query">
+    <select ng-model="subject" ng-change="change()">
+        <option value="math">数学</option>
+        <option value="english">英语</option>
+        <option value="chinese">语文</option>
+    </select>
+    <table class="table table-bordered text-center">
+        <tr>
+            <th class="text-center">序号</th>
+            <th class="text-center">姓名</th>
+            <th class="text-center" ng-click="language='math';flag=!flag">数学</th>
+            <th class="text-center" ng-click="language='english';flag=!flag">英语</th>
+            <th class="text-center" ng-click="language='chinese';flag=!flag">语文</th>
+        </tr>
+        <!--根据数学排序 sores | orderBy:'math':true 最后一个参数表示是否倒序-->
+        <!--<tr ng-repeat="student in sores | orderBy:'math':true track by $index">-->
+        <!--filter 后面可以跟一个对象 指定在哪一个字段中查询-->
+        <!--<tr ng-repeat="student in sores | orderBy:language:flag |filter:query track by $index">-->
+        <tr ng-repeat="student in sores | orderBy:language:flag |filter:obj track by $index">
+            <td>{{$index+1}}</td>
+            <td>{{student.name}}</td>
+            <td>{{student.math}}</td>
+            <td>{{student.english}}</td>
+            <td>{{student.chinese}}</td>
+        </tr>
+    </table>
+</div>
+<script src="../node_modules/angular/angular.js"></script>
+<script>
+    var app = angular.module('appModule', []);
+    app.controller('orderCtrl', ['$scope', function ($scope) {
+        $scope.obj={math:$scope.query};
+        $scope.subject = 'math';
+        $scope.change=function () {
+            console.log($scope.subject)//
+        };
+        $scope.sores = [
+            {name: '张三', math: 120, english: 40, chinese: 50},
+            {name: '李四', math: 80, english: 90, chinese: 70},
+            {name: '王五', math: 100, english: 70, chinese: 60},
+            {name: '赵丽', math: 90, english: 90, chinese: 80}
+        ]
+    }])
+</script>
+</body>
+</html>

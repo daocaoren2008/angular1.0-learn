@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body ng-controller="myCtrl">
+<!--要循环谁，就将ng-repeat写在谁身上-->
+
+<ul>
+    <li ng-repeat="b in iphones track by $index">
+        <ol>{{b.product}}
+            <li ng-repeat="c in b.type track by $index">{{c}}</li>
+        </ol>
+    </li>
+</ul>
+<script src="../node_modules/angular/angular.min.js"></script>
+<script>
+    var app = angular.module('appModule', []);
+    app.controller("myCtrl", ['$scope', '$rootScope', function ($scope) {
+        $scope.iphones = [
+            {
+                product: 'Nokia', type: ['5230', 'n97', 'n98']
+            },
+            {
+                product: '苹果', type: ['inphone3', 'iphone4', 'inphone5']
+            }
+        ];
+    }])
+</script>
+</body>
+</html>

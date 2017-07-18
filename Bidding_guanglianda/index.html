@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>报表</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <style>
+        .input input {
+            width: 50px;
+        }
+
+        .trigon {
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-width: 5px 0 5px 5px;
+            border-style: solid;
+            border-color: transparent transparent transparent #333;
+            margin-right:5px;
+        }
+        .turn{
+            transform: rotate(45deg);
+        }
+    </style>
+</head>
+<body>
+<span class="trigon-on"></span>
+<div class="container" ng-controller="myCtrl">
+    <table class="table table-bordered table-hover text-center">
+        <tr class="text-center">
+            <td colspan="6"></td>
+            <td colspan="4">ADOPTED</td>
+            <td colspan="4">pre-Tender Estimate(pte)</td>
+            <td colspan="2">A</td>
+            <td colspan="2">Glodon-Tim</td>
+        </tr>
+        <tr class="bg-info">
+            <td>S/N</td>
+            <td>Description</td>
+            <td>Trade</td>
+            <td>Unit</td>
+            <td>Type</td>
+            <td>Qte</td>
+            <td>Net rate</td>
+            <td>S</td>
+            <td>Amount</td>
+            <td>Remarks</td>
+            <td>Net rate</td>
+            <td>S</td>
+            <td>Amount</td>
+            <td>Remarks</td>
+            <td>Net rate</td>
+            <td>S</td>
+            <td>Amount</td>
+            <td>Remarks</td>
+        </tr>
+        <tr ng-repeat="data in dataList track by $index">
+            <td></td>
+            <td class="text-left" ng-click="open(data.main.Children)"><span ng-if="data.main.Children.length" class="trigon turn"></span>{{data.main.Description}}
+            </td>
+            <td>{{data.main.Trade}}</td>
+            <td>{{data.main.Unit}}</td>
+            <td>{{data.main.Type}}</td>
+            <td>{{data.main.Qte | number}}</td>
+
+            <td class="input"><input ng-model="data.adopted.NetRate"></td>
+            <td>{{data.adopted.S}}</td>
+            <td>{{data.adopted.Amount}}</td>
+            <td class="input"><input ng-model="data.adopted.Remarks"></td>
+
+            <td class="input"><input ng-model="data.PET.NetRate"></td>
+            <td>{{data.PET.S}}</td>
+            <td>{{data.PET.Amount}}</td>
+            <td class="input"><input ng-model="data.PET.Remarks"></td>
+            <td class="input"></td>
+            <td></td>
+            <td></td>
+            <td class="input"></td>
+        </tr>
+    </table>
+</div>
+<script src="node_modules/angular/angular.js"></script>
+<script>
+    var app = angular.module('appModule', []);
+    app.controller('myCtrl', function ($scope, $http) {
+        $scope.dataList = [
+            {
+                "main": {
+                    "Description": "Heading",
+                    "Children": [
+                        {
+                            "main": {
+                                "Description": "Heading",
+                                "Children": [],
+                                "Trade": "dem",
+                                "Unit": "m",
+                                "Type": "BIll item",
+                                "Qte": "1111"
+                            },
+                            "adopted": {
+                                "NetRate": "",
+                                "S": "",
+                                "Amount": "",
+                                "Remarks": ""
+                            },
+                            "PET": {
+                                "NetRate": "",
+                                "S": "",
+                                "Amount": "",
+                                "Remarks": ""
+                            }
+                        },
+                        {
+                            "main": {
+                                "Description": "Heading",
+                                "Children": [
+                                    {
+                                        "main": {
+                                            "Description": "Heading",
+                                            "Children": [],
+                                            "Trade": "dem",
+                                            "Unit": "m",
+                                            "Type": "BIll item",
+                                            "Qte": "1111"
+                                        },
+                                        "adopted": {
+                                            "NetRate": "",
+                                            "S": "",
+                                            "Amount": "",
+                                            "Remarks": ""
+                                        },
+                                        "PET": {
+                                            "NetRate": "",
+                                            "S": "",
+                                            "Amount": "",
+                                            "Remarks": ""
+                                        }
+                                    }
+                                ],
+                                "Trade": "dem",
+                                "Unit": "m",
+                                "Type": "BIll item",
+                                "Qte": "1111"
+                            },
+                            "adopted": {
+                                "NetRate": "",
+                                "S": "",
+                                "Amount": "",
+                                "Remarks": ""
+                            },
+                            "PET": {
+                                "NetRate": "",
+                                "S": "",
+                                "Amount": "",
+                                "Remarks": ""
+                            }
+                        }
+                    ],
+                    "Trade": "dem",
+                    "Unit": "m",
+                    "Type": "BIll item",
+                    "Qte": "1111"
+                },
+                "adopted": {
+                    "NetRate": 5,
+                    "S": "UD",
+                    "Amount": "",
+                    "Remarks": "12345"
+                },
+                "PET": {
+                    "NetRate": 1100,
+                    "S": "",
+                    "Amount": "12123",
+                    "Remarks": "0"
+                }
+            },
+            {
+                "main": {
+                    "Description": "Heading",
+                    "Children": "",
+                    "Trade": "dem",
+                    "Unit": "m",
+                    "Type": "BIll item",
+                    "Qte": "1111"
+                },
+                "adopted": {
+                    "NetRate": "",
+                    "S": "",
+                    "Amount": "",
+                    "Remarks": ""
+                },
+                "PET": {
+                    "NetRate": "",
+                    "S": "",
+                    "Amount": "",
+                    "Remarks": ""
+                }
+            },
+            {
+                "main": {
+                    "Description": "Heading",
+                    "Trade": "dem",
+                    "Children": "",
+                    "Unit": "m",
+                    "Type": "BIll item",
+                    "Qte": "1111"
+                },
+                "adopted": {
+                    "NetRate": "",
+                    "S": "",
+                    "Amount": "",
+                    "Remarks": ""
+                },
+                "PET": {
+                    "NetRate": "",
+                    "S": "",
+                    "Amount": "",
+                    "Remarks": ""
+                }
+            }
+        ];
+        /*        $http.get('/list.json').success(function (res) {
+         if(res.code==0){
+         $scope.dataList=res.data.dataList;
+         }
+         });*/
+        $scope.GlodonTim = {
+            "Discount1": "12",
+            "Discount": "0.12"
+        };
+        $scope.open = function (Children) {
+//            console.log(Children);
+            if(Children.length > 0){
+
+            }
+            
+        }
+    })
+</script>
+</body>
+</html>

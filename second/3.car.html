@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训http://www.zhufengpeixun.cn</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+    <style>
+        * {
+            font-family: "Microsoft YaHei"
+        }
+    </style>
+</head>
+<body ng-controller="myCtrl">
+<div class="container">
+    <table class="table table-bordered text-center table-hover">
+        <caption class="h2">购物车</caption>
+        <tr class="text-warning">
+            <th>全选 <input type="checkbox" ng-model="selectAll" ng-click="all()"></th>
+            <th class="text-center">商品名称</th>
+            <th class="text-center">商品价格</th>
+            <th class="text-center">商品数量</th>
+            <th class="text-center">小计</th>
+            <th class="text-center">操作</th>
+        </tr>
+        <tr ng-repeat="product in products" >
+            <td><input type="checkbox" ng-model="product.isSelected" ng-click="one()"></td>
+            <td>{{product.productName}}</td>
+            <td>{{product.price}}</td>
+            <td>
+                <!--disabled表示禁用  readonly仅读-->
+                <button
+                        ng-click="product.count=product.count-1"
+                        ng-disabled="product.count==1"
+                >-</button>
+                <input type="text" ng-model="product.count" ng-readonly="true">
+                <button ng-click="product.count=product.count-0+1">+</button>
+            </td>
+            <td>{{product.price*product.count}}</td>
+            <td>
+                <button class="btn btn-danger" ng-click="remove(product)">删除</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6" class="text-left">
+                <!--作用域上有任何值发生变化 都会执行sum函数 将sum函数的结果显示在页面上-->
+                总价：{{sum()}}
+            折扣:  <select ng-model="sale">
+                <option value="{{dis.val}}" ng-repeat="dis in discounts">{{dis.content}}</option>
+                </select>
+            折后价: {{sum()*sale | currency:'€'}}
+            </td>
+        </tr>
+    </table>
+    <form>
+        <!--ng-model可以采用 product.name 表示在作用域上声明一个 product对象 ，并且对象上有name属性-->
+        <div class="form-group">
+            <label for="productName" class="control-label">商品名称</label>
+            <input type="text" id="productName" class="form-control" placeholder="请输入名称" ng-model="product.productName">
+        </div>
+        <div class="form-group">
+            <label for="productPrice" class="control-label">商品价格</label>
+            <input type="text" id="productPrice" class="form-control" placeholder="请输入价格" ng-model="product.price">
+        </div>
+        <div class="form-group">
+            <button type="reset" class="btn btn-warning pull-right" ng-click="reset()">重置</button>
+            <button type="button" class="btn btn-primary pull-right" style="margin-right: 10px;" ng-click="addProduct()">添加</button>
+        </div>
+    </form>
+</div>
+<script src="../node_modules/angular/angular.js"></script>
+<script src="3.car.js"></script>
+</body>
+</html>

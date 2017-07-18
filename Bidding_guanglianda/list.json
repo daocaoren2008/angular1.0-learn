@@ -1,0 +1,145 @@
+{
+  "code": 0,
+  "data": {
+    "dataList": [
+      {
+        "main": {
+          "Description": "Heading",
+          "Children": [
+            {
+              "main": {
+                "Description": "Heading",
+                "Children": [],
+                "Trade": "dem",
+                "Unit": "m",
+                "Type": "BIll item",
+                "Qte": "1111"
+              },
+              "adopted": {
+                "NetRate": "",
+                "S": "",
+                "Amount": "",
+                "Remarks": ""
+              },
+              "PET": {
+                "NetRate": "",
+                "S": "",
+                "Amount": "",
+                "Remarks": ""
+              }
+            },
+            {
+              "main": {
+                "Description": "Heading",
+                "Children": [
+                  {
+                    "main": {
+                      "Description": "Heading",
+                      "Children": [],
+                      "Trade": "dem",
+                      "Unit": "m",
+                      "Type": "BIll item",
+                      "Qte": "1111"
+                    },
+                    "adopted": {
+                      "NetRate": "",
+                      "S": "",
+                      "Amount": "",
+                      "Remarks": ""
+                    },
+                    "PET": {
+                      "NetRate": "",
+                      "S": "",
+                      "Amount": "",
+                      "Remarks": ""
+                    }
+                  }
+                ],
+                "Trade": "dem",
+                "Unit": "m",
+                "Type": "BIll item",
+                "Qte": "1111"
+              },
+              "adopted": {
+                "NetRate": "",
+                "S": "",
+                "Amount": "",
+                "Remarks": ""
+              },
+              "PET": {
+                "NetRate": "",
+                "S": "",
+                "Amount": "",
+                "Remarks": ""
+              }
+            }
+          ],
+          "Trade": "dem",
+          "Unit": "m",
+          "Type": "BIll item",
+          "Qte": "1111"
+        },
+        "adopted": {
+          "NetRate": "",
+          "S": "",
+          "Amount": "",
+          "Remarks": ""
+        },
+        "PET": {
+          "NetRate": "",
+          "S": "",
+          "Amount": "",
+          "Remarks": ""
+        }
+      },
+      {
+        "main": {
+          "Description": "Heading",
+          "Children":"",
+          "Trade": "dem",
+          "Unit": "m",
+          "Type": "BIll item",
+          "Qte": "1111"
+        },
+        "adopted": {
+          "NetRate": "",
+          "S": "",
+          "Amount": "",
+          "Remarks": ""
+        },
+        "PET": {
+          "NetRate": "",
+          "S": "",
+          "Amount": "",
+          "Remarks": ""
+        }
+      },
+      {
+        "main": {
+          "Description": "Heading",
+          "Trade": "dem",
+          "Children":"",
+          "Unit": "m",
+          "Type": "BIll item",
+          "Qte": "1111"
+        },
+        "adopted": {
+          "NetRate": "",
+          "S": "",
+          "Amount": "",
+          "Remarks": ""
+        },
+        "PET": {
+          "NetRate": "",
+          "S": "",
+          "Amount": "",
+          "Remarks": ""
+        }
+      }
+    ],
+    "Glodon-Tim": {
+      "Discount(%)": "",
+      "Discount": ""
+    }
+  }
+}

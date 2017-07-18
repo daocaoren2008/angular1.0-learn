@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appModule">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训http://www.zhufengpeixun.cn</title>
+    <style>
+        div{background: red;width: 150px;height: 150px;position: absolute}
+        div+div{background: yellow}
+        div+div+div{background: blue}
+        div+div+div+div{background: pink}
+    </style>
+</head>
+<body>
+<div drag>hello1</div>
+<div drag>hello2</div>
+<div drag>hello3</div>
+<div drag>hello4</div>
+<div drag>hello5</div>
+<div drag>hello6</div>
+<!--先引用jq  angular才不会加载自己的jquery-->
+<script src="../node_modules/jquery/dist/jquery.js"></script>
+<script src="../node_modules/angular/angular.js"></script>
+<script>
+    var app = angular.module('appModule',[]);
+    app.directive('drag',function () {
+        return {
+            restrict:'A',
+            link:function (scope,element,attr) {
+                element.on('mousedown',function (e) {
+                    //当前鼠标距离浏览器的距离-元素到浏览器的距离 = 鼠标距离元素边缘的距离
+                    var disX = e.pageX - $(this).offset().left;
+                    var disY = e.pageY - $(this).offset().top;
+                    $(document).on('mousemove',function (e) {
+                        //鼠标距离浏览器的距离 - 鼠标距离元素边缘的距离 = 元素到浏览器的距离
+                        element.css({
+                            top:(e.pageY - disY),
+                            left:(e.pageX - disX),
+                        });
+                    });
+                    $(document).on('mouseup',function () {
+                        $(document).off(); //第一次执行后 移除所有document事件
+                    });
+                    e.preventDefault();//防止默认事件触发
+                });
+                /*element.on('click',function () {
+                 angular.element(this) == $(this)
+                 console.log(angular.element(this));
+                 })*/
+            }
+        }
+    });
+
+/*    angular 方式*/
+//    app.directive('drag',function () {
+//        return {
+//            restrict:'A',
+//            link:function (scope,element,attr) {
+//                element.on('mousedown',function (e) {
+//                    //当前鼠标距离浏览器的距离-元素到浏览器的距离 = 鼠标距离元素边缘的距离
+//                    var disX = e.pageX - this.offsetLeft;
+//                    var disY = e.pageY - this.offsetTop;
+//                    angular.element(document).on('mousemove',function (e) {
+//                        //鼠标距离浏览器的距离 - 鼠标距离元素边缘的距离 = 元素到浏览器的距离
+//                        element.css({
+//                            top:(e.pageY - disY)+'px',
+//                            left:(e.pageX - disX)+'px',
+//                        });
+//                    });
+//                    angular.element(document).on('mouseup',function () {
+//                        angular.element(document).off(); //第一次执行后 移除所有document事件
+//                    });
+//                    e.preventDefault();//防止默认事件触发
+//                });
+//                /*element.on('click',function () {
+//                 angular.element(this) == $(this)
+//                    console.log(angular.element(this));
+//                })*/
+//            }
+//        }
+//    })
+</script>
+</body>
+</html>
